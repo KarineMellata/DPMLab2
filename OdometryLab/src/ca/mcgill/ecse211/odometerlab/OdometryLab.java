@@ -2,12 +2,16 @@
 
 package ca.mcgill.ecse211.odometerlab;
 
+import java.awt.Color;
+
 import lejos.hardware.Button;
 import lejos.hardware.ev3.LocalEV3;
 import lejos.hardware.lcd.TextLCD;
 import lejos.hardware.motor.EV3LargeRegulatedMotor;
 import lejos.hardware.port.MotorPort;
 import lejos.hardware.port.Port;
+import lejos.hardware.sensor.*;
+import lejos.robotics.SampleProvider;
 
 public class OdometryLab {
 
@@ -16,17 +20,22 @@ public class OdometryLab {
   
   private static final EV3LargeRegulatedMotor rightMotor =
       new EV3LargeRegulatedMotor(LocalEV3.get().getPort("D"));
-
+  
+  private static final Port lightSensorPort = LocalEV3.get().getPort("S4");
   public static final double WHEEL_RADIUS = 2.1;
-  public static final double TRACK = 15.8;
+  public static final double TRACK = 14.2;
 
   public static void main(String[] args) {
-    int buttonChoice;
+	  int buttonChoice;
+    
+	  EV3ColorSensor lightSensor = new EV3ColorSensor(lightSensorPort);
+	  SampleProvider colorRead = lightSensor.getMode("Red");
+	  float[] color = new float[colorRead.sampleSize()];
 
     final TextLCD t = LocalEV3.get().getTextLCD();
     Odometer odometer = new Odometer(leftMotor, rightMotor);
     OdometryDisplay odometryDisplay = new OdometryDisplay(odometer, t);
-    OdometryCorrection odometryCorrection = new OdometryCorrection(odometer);
+    OdometryCorrection odometryCorrection = new OdometryCorrection(lightSensor, color, odometer);
 
     do {
       // clear the display

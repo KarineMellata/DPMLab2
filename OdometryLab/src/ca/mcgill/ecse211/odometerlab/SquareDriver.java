@@ -27,14 +27,15 @@ public class SquareDriver {
 
     for (int i = 0; i < 4; i++) {
       // drive forward two tiles
-      leftMotor.setSpeed(FORWARD_SPEED);
+      leftMotor.setSpeed(FORWARD_SPEED + 5);
       rightMotor.setSpeed(FORWARD_SPEED);
+      
 
-      leftMotor.rotate(convertDistance(leftRadius, 60.96), true);
-      rightMotor.rotate(convertDistance(rightRadius, 60.96), false);
+      leftMotor.rotate(convertDistance(leftRadius, 91.44), true);
+      rightMotor.rotate(convertDistance(rightRadius, 91.44), false);
 
       // turn 90 degrees clockwise
-      leftMotor.setSpeed(ROTATE_SPEED);
+      leftMotor.setSpeed(ROTATE_SPEED + 5);
       rightMotor.setSpeed(ROTATE_SPEED);
 
       leftMotor.rotate(convertAngle(leftRadius, width, 90.0), true);

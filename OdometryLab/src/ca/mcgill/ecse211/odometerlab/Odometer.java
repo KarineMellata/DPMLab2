@@ -37,22 +37,21 @@ public class Odometer extends Thread {
     while (true) {
       updateStart = System.currentTimeMillis();
       // TODO put (some of) your odometer code here
-      double deltaD = 0.0;
-      double deltaT = 0.0;
-      double dX = 0.0;
-      double dY = 0.0;
-      double distL = 0.0;
-      double distR = 0.0;
-
+      double deltaD;
+      double deltaT;
+      double dX;
+      double dY;
+      double distL;
+      double distR;
+      
       nowLeftMotorTachoCount = leftMotor.getTachoCount();      // get tacho counts now
       nowRightMotorTachoCount = rightMotor.getTachoCount(); 
-      distL = 3.14159*OdometryLab.WHEEL_RADIUS*(nowLeftMotorTachoCount-leftMotorTachoCount)/180;     // compute wheel 
-      distR = 3.14159*OdometryLab.WHEEL_RADIUS*(nowRightMotorTachoCount-rightMotorTachoCount)/180;   // displacements
+      distL = 3.14159*(OdometryLab.WHEEL_RADIUS)*(nowLeftMotorTachoCount-leftMotorTachoCount)/180;     // compute wheel 
+      distR = 3.14159*(OdometryLab.WHEEL_RADIUS)*(nowRightMotorTachoCount-rightMotorTachoCount)/180;   // displacements
       leftMotorTachoCount=nowLeftMotorTachoCount;           // save tacho counts for next iteration 
       rightMotorTachoCount=nowRightMotorTachoCount; 
       deltaD = 0.5*(distL+distR);       // compute vehicle displacement 
-      deltaT = (distL-distR)/OdometryLab.TRACK;        // compute change in heading 
-    
+      deltaT = (distL-distR)/(OdometryLab.TRACK);        // compute change in heading 
 
       synchronized (lock) {
         /**
@@ -60,15 +59,14 @@ public class Odometer extends Thread {
          * and theta in this block. Do not perform complex math
          * 
          */
-        theta = 0; // TODO replace example value
-        theta += deltaT;            // update heading
+      theta += deltaT;            // update heading
         if(theta >= 360) {
-        	theta = theta-360;
+        		theta = theta-360;
         }
         dX = deltaD * Math.sin(theta);    // compute X component of displacement 
         dY = deltaD * Math.cos(theta);  // compute Y component of displacement
         x = x + dX;            // update estimates of X and Y position 
-        x = x + dY;
+        y = y + dY;
       }
 
       // this ensures that the odometer only runs once every period
