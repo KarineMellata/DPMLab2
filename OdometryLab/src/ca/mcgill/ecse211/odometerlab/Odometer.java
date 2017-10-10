@@ -48,8 +48,8 @@ public class Odometer extends Thread {
       nowRightMotorTachoCount = rightMotor.getTachoCount(); 
       distL = 3.14159*(OdometryLab.WHEEL_RADIUS)*(nowLeftMotorTachoCount-leftMotorTachoCount)/180;     // compute wheel 
       distR = 3.14159*(OdometryLab.WHEEL_RADIUS)*(nowRightMotorTachoCount-rightMotorTachoCount)/180;   // displacements
-      leftMotorTachoCount=nowLeftMotorTachoCount;           // save tacho counts for next iteration 
-      rightMotorTachoCount=nowRightMotorTachoCount; 
+      leftMotorTachoCount  = nowLeftMotorTachoCount;           // save tacho counts for next iteration 
+      rightMotorTachoCount = nowRightMotorTachoCount; 
       deltaD = 0.5*(distL+distR);       // compute vehicle displacement 
       deltaT = (distL-distR)/(OdometryLab.TRACK);        // compute change in heading 
 
@@ -59,12 +59,15 @@ public class Odometer extends Thread {
          * and theta in this block. Do not perform complex math
          * 
          */
-      theta += deltaT;            // update heading
+      theta += (deltaT)*(360/(2*Math.PI));            // update heading
         if(theta >= 360) {
         		theta = theta-360;
         }
-        dX = deltaD * Math.sin(theta);    // compute X component of displacement 
-        dY = deltaD * Math.cos(theta);  // compute Y component of displacement
+        if(theta < 0) {
+        	theta = 359.9;
+        }
+        dX = deltaD * Math.sin((theta)/(360/(2*Math.PI)));    // compute X component of displacement 
+        dY = deltaD * Math.cos((theta)/(360/(2*Math.PI)));  // compute Y component of displacement
         x = x + dX;            // update estimates of X and Y position 
         y = y + dY;
       }
